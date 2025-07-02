@@ -28,23 +28,28 @@ const cubeLayout = [
 const implementLeftRotate = (matrix, times ) => {
     const rememberWhiteSide  = matrix[0].map(row => [...row])
     for(let i  = 0; i < 3; i++) {
-        times === 1 && (matrix[0][i][0] = matrix[2][i][0])  // from white to green
+        times === 1 && (matrix[0][i][0] = matrix[4][i][0])  // from white to blue
         times === 2 && (matrix[0][i][0] = matrix[5][i][0]) // from white to yellow
+        times === -1 && (matrix[0][i][0] = matrix[2][i][0]) // from white to green
     }
     const rememberGreenSide  = matrix[2].map(row => [...row])
     for(let i  = 0; i < 3; i++) {
-        times === 1 && (matrix[2][i][0] = matrix[5][i][0])  // from green to yellow
+        times === 1 && (matrix[2][i][0] = rememberWhiteSide[i][0])  // from green to white
         times === 2 && (matrix[2][i][0] = matrix[4][i][0]) // from green to blue
+        times === -1 && (matrix[2][i][0] = matrix[5][i][0]) // from green to blue
     }
     for(let i  = 0; i < 3; i++) {
-        times === 1 && (matrix[5][i][0] = matrix[4][i][0])  // from yellow to blue
+        times === 1 && (matrix[5][i][0] = rememberGreenSide[i][0])  // from yellow to green
         times === 2 && (matrix[5][i][0] = rememberWhiteSide[i][0]) // from yellow to white
+        times === -1 && (matrix[5][i][0] = matrix[4][i][0]) // from yellow to blue
     }
     for(let i  = 0; i < 3; i++) {
-        times === 1 && (matrix[4][i][0] = rememberWhiteSide[i][0])  // from blue to white
+        times === 1 && (matrix[4][i][0] = matrix[5][i][0])  // from blue to yellow
         times === 2 && (matrix[4][i][0] = rememberGreenSide[i][0]) // from blue to green
+        times === -1 && (matrix[4][i][0] = rememberWhiteSide[i][0]) // from blue to white
     }
-    matrix[1] = rotate90degOneSide(cubeLayout[1], times)
+    console.log("TEST")
+    console.log(rotate90degOneSide(cubeLayout[1], times))
     return matrix
 }
 const rotate90degOneSide = (matrix, times) => {
@@ -66,12 +71,12 @@ const rotate90degOneSide = (matrix, times) => {
     }
     if (times === -1) {
         const size = matrix.length
-        const ret = [[], [], []]
         for (let i = 0; i < size; i++) {              //swap logic
             for (let j = 0; j < size; j++) {
                 ret[i][j] = matrix[j][size - i - 1]
             }
         }
+        console.log(ret)
     }
     return ret
 }
@@ -84,4 +89,4 @@ const printMatrix = (matrix) => {
         console.log("--------")
     }
 }
-printMatrix(implementLeftRotate(cubeLayout, 1))
+printMatrix(implementLeftRotate(cubeLayout, -1))
