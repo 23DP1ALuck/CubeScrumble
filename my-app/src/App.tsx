@@ -6,29 +6,34 @@ import {
     implementLeftRotate,
     implementFrontRotate,
     implementBackRotate,
-    implementUpRotate
+    implementUpRotate, implementDownRotate
 } from "./utils/rotators.ts"
 import {cubeLayout} from "./utils/rotators.ts";
 
 function App() {
 
     const moves : string[] = ["D", "D\'", "D2", "B", "B\'", "B2", "F", "F\'", "F2", "L", "L\'", "L2", "R", "R\'", "R2", "U", "U\'", "U2"]
-    const generatedMoves : string[] = [];
-    const generate= (): void => {
+
+    const generate= (): string[] => {
+        const generatedMoves : string[] = [];
         for(let i : number = 0; i < 20; i++){
             generatedMoves.push(moves[Math.floor(Math.random()*moves.length)]);
         }
+        return generatedMoves
     }
 
-    const calculateLayout = () : string[][][] => {
-        let newLayout : string[][][] = cubeLayout.map(side => [...side]);
-        for(let i : number = 0; i < 20; i++){
+    const calculateLayout = (generatedMoves : string[]) : string[][][] => {
+        let newLayout : string[][][] = cubeLayout.map(side => side.map(row => [...row]) );
+        console.log("test",newLayout)
+        for(let i : number = 0; i < generatedMoves.length; i++){
             switch (generatedMoves[i]){
                 case "R":
                     newLayout = implementRightRotate(newLayout, 1)
+                    console.log("R",newLayout)
                     break;
                 case "R2":
                     newLayout = implementRightRotate(newLayout, 2)
+                    console.log("R2",newLayout)
                     break;
                 case "R\'":
                     newLayout = implementRightRotate(newLayout, -1)
@@ -69,13 +74,25 @@ function App() {
                 case "U\'":
                     newLayout = implementUpRotate(newLayout, -1)
                     break;
+                case "D":
+                    newLayout = implementDownRotate(newLayout, 1)
+                    break;
+                case "D2":
+                    newLayout = implementDownRotate(newLayout, 2)
+                    break;
+                case "D\'":
+                    newLayout = implementDownRotate(newLayout, -1)
+                    break
             }
         }
         return newLayout;
     }
     useEffect(() => {
-       generate();
-       console.log(generatedMoves);
+       const moves : string[] = generate();
+       console.log(moves);
+       const testScrumble : string[] = ["L2","U","R2","U\'","L2","F2","D\'", "U\'", "B2", "R2", "U2", "L", "F\'"]
+       const newLayout : string[][][] = calculateLayout(["L2", "U", "R2", "U\'", "L2", "F2", "D\'"]);
+       console.log("AFTER SCRUMBLE:",newLayout);
     },[])
   return (
     <>

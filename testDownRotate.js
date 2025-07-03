@@ -51,31 +51,31 @@ const rotate90degOneSide = (matrix, times) => {
     }
     return ret
 }
-const implementRightRotate = (matrix, times) => {
-    const rememberWhiteSide = matrix[0].map(row => [...row])
-    for (let i = 0; i < 3; i++) {
-        times === 1 && (matrix[0][i][2] = matrix[2][i][2])  // from white to green
-        times === 2 && (matrix[0][i][2] = matrix[5][i][2]) // from white to yellow
-        times === -1 && (matrix[0][i][2] = matrix[4][i][2]) // from white to blue
-    }
+const implementDownRotate = (matrix, times) => {
     const rememberGreenSide = matrix[2].map(row => [...row])
-    for (let i = 0; i < 3; i++) {
-        times === 1 && (matrix[2][i][2] = matrix[5][i][2])  // from green to yellow
-        times === 2 && (matrix[2][i][2] = matrix[4][i][0]) // from green to blue
-        times === -1 && (matrix[2][i][2] = rememberWhiteSide[i][2]) // from green to white
+    for(let i  = 0; i < 3; i++) {
+        times === 1 && (matrix[2][2][i] = matrix[1][2][i])  // from green to orange
+        times === 2 && (matrix[2][2][i] = matrix[4][2][i]) // from green to blue
+        times === -1 && (matrix[2][2][i] = matrix[3][2][i]) // from green to red
     }
-    const rememberYellowSide = matrix[5].map(row => [...row])
-    for (let i = 0; i < 3; i++) {
-        times === 1 && (matrix[5][i][2] = matrix[4][i][2])  // from yellow to blue
-        times === 2 && (matrix[5][i][2] = rememberWhiteSide[i][2]) // from yellow to white
-        times === -1 && (matrix[5][i][2] = rememberGreenSide[i][2]) // from yellow to green
+    const rememberOrangeSide = matrix[1].map(row => [...row])
+    for(let i = 0; i < 3; i++) {
+        times === 1 && (matrix[1][2][i] = matrix[4][2][i])  // from orange to blue
+        times === 2 && (matrix[1][2][i] = matrix[3][2][i]) // from orange to red
+        times === -1 && (matrix[1][2][i] = rememberGreenSide[2][i]) // from orange to green
     }
-    for (let i = 0; i < 3; i++) {
-        times === 1 && (matrix[4][i][2] = rememberWhiteSide[i][2])  // from blue to white
-        times === 2 && (matrix[4][i][2] = rememberGreenSide[i][2]) // from blue to green
-        times === -1 && (matrix[4][i][2] = rememberYellowSide[i][2]) // from blue to yellow
+    const rememberBlueSide = matrix[4].map(row => [...row])
+    for(let i  = 0; i < 3; i++) {
+        times === 1 && (matrix[4][2][i] = matrix[3][2][i])  // from blue to red
+        times === 2 && (matrix[4][2][i] = rememberGreenSide[2][i]) // from blue to green
+        times === -1 && (matrix[4][2][i] = rememberOrangeSide[2][i]) // from blue to orange
     }
-    matrix[3] = rotate90degOneSide(cubeLayout[3], times)
+    for(let i  = 0; i < 3; i++) {
+        times === 1 && (matrix[3][2][i] = rememberGreenSide[2][i])  // from red to green
+        times === 2 && (matrix[3][2][i] = rememberOrangeSide[2][i]) // from red to orange
+        times === -1 && (matrix[3][2][i] = rememberBlueSide[2][i]) // from red to blue
+    }
+    matrix[5] = rotate90degOneSide(matrix[5], times)
     return matrix
 }
 const printMatrix = (matrix) => {
@@ -87,4 +87,4 @@ const printMatrix = (matrix) => {
         console.log("--------")
     }
 }
-printMatrix(implementRightRotate(cubeLayout, 2))
+printMatrix(implementDownRotate(cubeLayout, -1))

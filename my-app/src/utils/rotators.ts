@@ -43,7 +43,6 @@ const rotate90degOneSide = (matrix: string[][], times : number) : string[][] => 
     }
     if(times === -1) {
         const size : number = matrix.length
-        const ret : string[][] = [[],[],[]]
         for(let i = 0; i < size; i++){              //swap logic
             for(let j  = 0; j < size; j++ ){
                 ret[i][j] = matrix[j][size - i - 1]
@@ -61,8 +60,9 @@ export const implementRightRotate = (matrix: string[][][], times : number) : str
     }
     const rememberGreenSide : string[][] = matrix[2].map(row => [...row])
     for(let i : number = 0; i < 3; i++) {
+        let forR2Move = 2
         times === 1 && (matrix[2][i][2] = matrix[5][i][2])  // from green to yellow
-        times === 2 && (matrix[2][i][2] = matrix[4][i][2]) // from green to blue
+        times === 2 && (matrix[2][i][2] = matrix[4][forR2Move - i][0]) // from green to blue
         times === -1 && (matrix[2][i][2] = rememberWhiteSide[i][2]) // from green to white
     }
     const rememberYellowSide : string[][] = matrix[5].map(row => [...row])
@@ -72,64 +72,75 @@ export const implementRightRotate = (matrix: string[][][], times : number) : str
         times === -1 && (matrix[5][i][2] = rememberGreenSide[i][2]) // from yellow to green
     }
     for(let i : number = 0; i < 3; i++) {
-        times === 1 && (matrix[4][i][2] = rememberWhiteSide[i][2])  // from blue to white
-        times === 2 && (matrix[4][i][2] = rememberGreenSide[i][2]) // from blue to green
-        times === -1 && (matrix[4][i][2] = rememberYellowSide[i][2]) // from blue to yellow
+        let forR2Move : number = 2
+        times === 1 && (matrix[4][i][0] = rememberWhiteSide[i][2])  // from blue to white
+        times === 2 && (matrix[4][i][0] = rememberGreenSide[forR2Move - i][2]) // from blue to green
+        times === -1 && (matrix[4][i][0] = rememberYellowSide[i][2]) // from blue to yellow
     }
-    matrix[3] = rotate90degOneSide(cubeLayout[3], times)
+    matrix[3] = rotate90degOneSide(matrix[3], times)
     return matrix
 }
 export const implementLeftRotate = (matrix: string[][][], times : number) : string[][][] => {
     const rememberWhiteSide : string[][] = matrix[0].map(row => [...row])
     for(let i : number = 0; i < 3; i++) {
+        let forL2Move = 2
         times === 1 && (matrix[0][i][0] = matrix[4][i][0])  // from white to blue
-        times === 2 && (matrix[0][i][0] = matrix[5][i][0]) // from white to yellow
+        times === 2 && (matrix[0][i][0] = matrix[5][forL2Move - i][0]) // from white to yellow
         times === -1 && (matrix[0][i][0] = matrix[2][i][0]) // from white to green
     }
     const rememberGreenSide : string[][] = matrix[2].map(row => [...row])
     for(let i : number = 0; i < 3; i++) {
+        let forL2Move = 2
         times === 1 && (matrix[2][i][0] = rememberWhiteSide[i][0])  // from green to white
-        times === 2 && (matrix[2][i][0] = matrix[4][i][0]) // from green to blue
+        times === 2 && (matrix[2][i][0] = matrix[4][forL2Move - i][2]) // from green to blue
         times === -1 && (matrix[2][i][0] = matrix[5][i][0]) // from green to blue
     }
     for(let i : number = 0; i < 3; i++) {
+        let forL2Move = 2
         times === 1 && (matrix[5][i][0] = rememberGreenSide[i][0])  // from yellow to green
-        times === 2 && (matrix[5][i][0] = rememberWhiteSide[i][0]) // from yellow to white
+        times === 2 && (matrix[5][i][0] = rememberWhiteSide[forL2Move - i][0]) // from yellow to white
         times === -1 && (matrix[5][i][0] = matrix[4][i][0]) // from yellow to blue
     }
     for(let i : number = 0; i < 3; i++) {
-        times === 1 && (matrix[4][i][0] = matrix[5][i][0])  // from blue to yellow
-        times === 2 && (matrix[4][i][0] = rememberGreenSide[i][0]) // from blue to green
-        times === -1 && (matrix[4][i][0] = rememberWhiteSide[i][0]) // from blue to white
+        let forL2Move = 2
+        times === 1 && (matrix[4][i][2] = matrix[5][i][0])  // from blue to yellow
+        times === 2 && (matrix[4][i][2] = rememberGreenSide[forL2Move - i][0]) // from blue to green
+        times === -1 && (matrix[4][i][2] = rememberWhiteSide[i][0]) // from blue to white
     }
-    matrix[1] = rotate90degOneSide(cubeLayout[1], times)
+    matrix[1] = rotate90degOneSide(matrix[1], times)
     return matrix
 }
 export const implementFrontRotate = (matrix: string[][][], times: number): string[][][] =>  {
     const rememberWhiteSide: string[][] = matrix[0].map(row => [...row])
+    const yellowTest = matrix[5].map(side => [...side])
+    console.log("YELLOW SIDE 1st ROW", yellowTest[0])
     for(let i : number  = 0; i < 3; i++) {
+        let forF2Move = 2
         times === 1 && (matrix[0][2][i] = matrix[1][i][2])  // from white to orange
-        times === 2 && (matrix[0][2][i] = matrix[5][0][i]) // from white to yellow
+        times === 2 && (matrix[0][2][i] = matrix[5][0][forF2Move - i]) // from white to yellow
         times === -1 && (matrix[0][2][i] = matrix[3][i][0]) // from white to red
     }
     const rememberOrangeSide : string[][] = matrix[1].map(row => [...row])
     for(let i : number = 0; i < 3; i++) {
+        let forF2Move = 2
         times === 1 && (matrix[1][i][2] = matrix[5][0][i])  // from orange to yellow
-        times === 2 && (matrix[1][i][2] = matrix[3][i][0]) // from orange to red
+        times === 2 && (matrix[1][i][2] = matrix[3][forF2Move - i][0]) // from orange to red
         times === -1 && (matrix[1][i][2] = rememberWhiteSide[2][i]) // from orange to white
     }
     const rememberYellowSide : string[][] = matrix[5].map(row => [...row])
     for(let i : number  = 0; i < 3; i++) {
+        let forF2Move = 2
         times === 1 && (matrix[5][0][i] = matrix[3][i][0])  // from yellow to red
-        times === 2 && (matrix[5][0][i] = rememberWhiteSide[2][i]) // from yellow to white
+        times === 2 && (matrix[5][0][i] = rememberWhiteSide[2][forF2Move - i]) // from yellow to white
         times === -1 && (matrix[5][0][i] = rememberOrangeSide[i][2]) // from yellow to orange
     }
     for(let i : number  = 0; i < 3; i++) {
+        let forF2Move = 2
         times === 1 && (matrix[3][i][0] = rememberWhiteSide[2][i])  // from red to white
-        times === 2 && (matrix[3][i][0] = rememberOrangeSide[i][2]) // from red to orange
+        times === 2 && (matrix[3][i][0] = rememberOrangeSide[forF2Move - i][2]) // from red to orange
         times === -1 && (matrix[3][i][0] = rememberYellowSide[0][i]) // from red to yellow
     }
-    matrix[2] = rotate90degOneSide(cubeLayout[2], times)
+    matrix[2] = rotate90degOneSide(matrix[2], times)
     return matrix
 }
 export const implementBackRotate = (matrix : string[][][], times : number) : string[][][] => {
@@ -156,7 +167,7 @@ export const implementBackRotate = (matrix : string[][][], times : number) : str
         times === 2 && (matrix[3][i][2] = rememberOrangeSide[i][2]) // from red to orange
         times === -1 && (matrix[3][i][2] = rememberWhiteSide[0][i]) // from red to white
     }
-    matrix[4] = rotate90degOneSide(cubeLayout[4], times)
+    matrix[4] = rotate90degOneSide(matrix[4], times)
     return matrix
 }
 export const implementUpRotate = (matrix : string[][][], times : number) => {
@@ -184,5 +195,33 @@ export const implementUpRotate = (matrix : string[][][], times : number) => {
         times === -1 && (matrix[3][0][i] = rememberGreenSide[0][i]) // from red to green
     }
     matrix[0] = rotate90degOneSide(matrix[0], times)
+    console.log("WHITE:", matrix[0])
+    return matrix
+}
+export const implementDownRotate = (matrix: string[][][], times : number) => {
+    const rememberGreenSide : string[][] = matrix[2].map(row => [...row])
+    for(let i : number  = 0; i < 3; i++) {
+        times === 1 && (matrix[2][2][i] = matrix[1][2][i])  // from green to orange
+        times === 2 && (matrix[2][2][i] = matrix[4][2][i]) // from green to blue
+        times === -1 && (matrix[2][2][i] = matrix[3][2][i]) // from green to red
+    }
+    const rememberOrangeSide : string[][] = matrix[1].map(row => [...row])
+    for(let i : number = 0; i < 3; i++) {
+        times === 1 && (matrix[1][2][i] = matrix[4][2][i])  // from orange to blue
+        times === 2 && (matrix[1][2][i] = matrix[3][2][i]) // from orange to red
+        times === -1 && (matrix[1][2][i] = rememberGreenSide[2][i]) // from orange to green
+    }
+    const rememberBlueSide : string[][] = matrix[4].map(row => [...row])
+    for(let i : number  = 0; i < 3; i++) {
+        times === 1 && (matrix[4][2][i] = matrix[3][2][i])  // from blue to red
+        times === 2 && (matrix[4][2][i] = rememberGreenSide[2][i]) // from blue to green
+        times === -1 && (matrix[4][2][i] = rememberOrangeSide[2][i]) // from blue to orange
+    }
+    for(let i : number  = 0; i < 3; i++) {
+        times === 1 && (matrix[3][2][i] = rememberGreenSide[2][i])  // from red to green
+        times === 2 && (matrix[3][2][i] = rememberOrangeSide[2][i]) // from red to orange
+        times === -1 && (matrix[3][2][i] = rememberBlueSide[2][i]) // from red to blue
+    }
+    matrix[5] = rotate90degOneSide(matrix[5], times)
     return matrix
 }
