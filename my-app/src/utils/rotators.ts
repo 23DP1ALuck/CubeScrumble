@@ -132,3 +132,30 @@ export const implementFrontRotate = (matrix: string[][][], times: number): strin
     matrix[2] = rotate90degOneSide(cubeLayout[2], times)
     return matrix
 }
+export const implementBackRotate = (matrix : string[][][], times : number) : string[][][] => {
+    const rememberWhiteSide: string[][] = matrix[0].map(row => [...row])
+    for(let i : number  = 0; i < 3; i++) {
+        times === 1 && (matrix[0][0][i] = matrix[3][i][2])  // from white to red
+        times === 2 && (matrix[0][0][i] = matrix[5][2][i]) // from white to yellow
+        times === -1 && (matrix[0][0][i] = matrix[1][i][0]) // from white to orange
+    }
+    const rememberOrangeSide : string[][] = matrix[1].map(row => [...row])
+    for(let i : number = 0; i < 3; i++) {
+        times === 1 && (matrix[1][i][0] = rememberWhiteSide[0][i])  // from orange to white
+        times === 2 && (matrix[1][i][0] = matrix[3][i][2]) // from orange to red
+        times === -1 && (matrix[1][i][0] = matrix[5][2][i]) // from orange to yellow
+    }
+    const rememberYellowSide : string[][] = matrix[5].map(row => [...row])
+    for(let i : number  = 0; i < 3; i++) {
+        times === 1 && (matrix[5][2][i] = rememberOrangeSide[i][0])  // from yellow to orange
+        times === 2 && (matrix[5][2][i] = rememberWhiteSide[0][i]) // from yellow to white
+        times === -1 && (matrix[5][2][i] = matrix[3][i][2]) // from yellow to red
+    }
+    for(let i : number  = 0; i < 3; i++) {
+        times === 1 && (matrix[3][i][2] = rememberYellowSide[2][i])  // from red to yellow
+        times === 2 && (matrix[3][i][2] = rememberOrangeSide[i][2]) // from red to orange
+        times === -1 && (matrix[3][i][2] = rememberWhiteSide[0][i]) // from red to white
+    }
+    matrix[4] = rotate90degOneSide(cubeLayout[4], times)
+    return matrix
+}

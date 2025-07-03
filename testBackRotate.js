@@ -51,7 +51,7 @@ const rotate90degOneSide = (matrix, times) => {
     }
     return ret
 }
-const implementFrontRotate = (matrix, times) => {
+const implementBackRotate = (matrix, times) => {
     const rememberWhiteSide = matrix[0].map(row => [...row])
     for(let i  = 0; i < 3; i++) {
         times === 1 && (matrix[0][0][i] = matrix[3][i][2])  // from white to red
@@ -66,15 +66,25 @@ const implementFrontRotate = (matrix, times) => {
     }
     const rememberYellowSide = matrix[5].map(row => [...row])
     for(let i  = 0; i < 3; i++) {
-        times === 1 && (matrix[5][0][i] = matrix[1][i][0])  // from yellow to orange
-        times === 2 && (matrix[5][0][i] = rememberWhiteSide[0][i]) // from yellow to white
-        times === -1 && (matrix[5][0][i] = matrix[3][i][2]) // from yellow to red
+        times === 1 && (matrix[5][2][i] = rememberOrangeSide[i][0])  // from yellow to orange
+        times === 2 && (matrix[5][2][i] = rememberWhiteSide[0][i]) // from yellow to white
+        times === -1 && (matrix[5][2][i] = matrix[3][i][2]) // from yellow to red
     }
     for(let i  = 0; i < 3; i++) {
-        times === 1 && (matrix[3][i][0] = rememberWhiteSide[2][i])  // from red to white
-        times === 2 && (matrix[3][i][0] = rememberOrangeSide[i][2]) // from red to orange
-        times === -1 && (matrix[3][i][0] = rememberYellowSide[0][i]) // from red to yellow
+        times === 1 && (matrix[3][i][2] = rememberYellowSide[2][i])  // from red to yellow
+        times === 2 && (matrix[3][i][2] = rememberOrangeSide[i][2]) // from red to orange
+        times === -1 && (matrix[3][i][2] = rememberWhiteSide[0][i]) // from red to white
     }
-    matrix[2] = rotate90degOneSide(cubeLayout[2], times)
+    matrix[4] = rotate90degOneSide(cubeLayout[4], times)
     return matrix
 }
+const printMatrix = (matrix) => {
+    for (let side = 0; side < matrix.length; side++) {
+        console.log(`Side ${side}:`)
+        for (let row = 0; row < matrix[side].length; row++) {
+            console.log(matrix[side][row].join(" "))
+        }
+        console.log("--------")
+    }
+}
+printMatrix(implementBackRotate(cubeLayout, -1))
