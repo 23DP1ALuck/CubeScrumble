@@ -1,7 +1,13 @@
 import './App.css'
 import Cube from "./Components/Cube.tsx";
 import {useEffect} from "react";
-import {implementRightRotate, implementLeftRotate, implementFrontRotate, implementBackRotate} from "./utils/rotators.ts"
+import {
+    implementRightRotate,
+    implementLeftRotate,
+    implementFrontRotate,
+    implementBackRotate,
+    implementUpRotate
+} from "./utils/rotators.ts"
 import {cubeLayout} from "./utils/rotators.ts";
 
 function App() {
@@ -53,6 +59,16 @@ function App() {
                     break;
                 case "B\'":
                     newLayout = implementBackRotate(newLayout, -1)
+                    break;
+                case "U":
+                    newLayout = implementUpRotate(newLayout, 1)
+                    break;
+                case "U2":
+                    newLayout = implementUpRotate(newLayout, 2)
+                    break;
+                case "U\'":
+                    newLayout = implementUpRotate(newLayout, -1)
+                    break;
             }
         }
         return newLayout;
