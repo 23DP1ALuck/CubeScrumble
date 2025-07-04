@@ -1,6 +1,6 @@
 import './App.css'
 import Cube from "./Components/Cube.tsx";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import {
     implementRightRotate,
     implementLeftRotate,
@@ -9,15 +9,13 @@ import {
     implementUpRotate, implementDownRotate
 } from "./utils/rotators.ts"
 import {cubeLayout} from "./utils/rotators.ts";
+import {MOVES} from "./constants.ts";
 
 function App() {
-
-    const moves : string[] = ["D", "D\'", "D2", "B", "B\'", "B2", "F", "F\'", "F2", "L", "L\'", "L2", "R", "R\'", "R2", "U", "U\'", "U2"]
-
     const generate= (): string[] => {
         const generatedMoves : string[] = [];
         for(let i : number = 0; i < 20; i++){
-            generatedMoves.push(moves[Math.floor(Math.random()*moves.length)]);
+            generatedMoves.push(MOVES[Math.floor(Math.random()*MOVES.length)]);
         }
         return generatedMoves
     }
@@ -87,33 +85,48 @@ function App() {
         }
         return newLayout;
     }
+    const [layout, setLayout] = useState<string[][][]>(cubeLayout)
+    const [moves, setMoves] = useState<string[]>((): string[] => generate());
     useEffect(() => {
-       const moves : string[] = generate();
-       console.log(moves);
-       // const testScrumble : string[]  =  [];
-       const newLayout : string[][][] = calculateLayout(["B","B","R","D","R\'", "U", "F\'", "B", "R\'","R","F2","D","F\'","R2","L\'", "B\'", "F2", "B", "F", "U2"]);
-       console.log("AFTER SCRUMBLE:",newLayout);
-    },[])
+        const newLayout : string[][][] = calculateLayout(moves);
+        console.log("SCRUMBLE:",moves);
+        setLayout(newLayout);
+        console.log("AFTER SCRUMBLE:",newLayout);
+    }, [moves]);
+
   return (
     <>
-        <div className="flex flex-col">
-            <div className="grid grid-cols-4 gap-2 grid-rows-3 max-w-max">
-                <div></div>
-                <Cube colors={["white", "white", "white","white", "white", "white","white", "white", "white"]} />
-                <div></div>
-                <div></div>
-
-                <Cube colors={["orange", "orange", "orange","orange", "orange", "orange","orange", "orange", "orange"]}/>
-                <Cube colors={["green","green","green","green","green","green","green","green","green",]}/>
-                <Cube colors={["red","red","red","red","red","red","red","red","red"]}/>
-                <Cube colors={["blue","blue","blue","blue","blue","blue","blue","blue","blue"]}/>
-                <div></div>
-                <Cube colors={["yellow","yellow","yellow","yellow","yellow","yellow","yellow","yellow","yellow"]}/>
-                <div></div>
-                <div></div>
+        <div className="flex flex-col w-full">
+            <div className="flex flex-col w-full justify-center items-center" >
+                <div className="grid grid-cols-4 gap-2 grid-rows-3 max-w-max">
+                    <div></div>
+                    <Cube colors={layout[0].flat()} />
+                    <div></div>
+                    <div></div>
+                    <Cube colors={layout[1].flat()}/>
+                    <Cube colors={layout[2].flat()}/>
+                    <Cube colors={layout[3].flat()}/>
+                    <Cube colors={layout[4].flat()}/>
+                    <div></div>
+                    <Cube colors={layout[5].flat()}/>
+                    <div></div>
+                    <div></div>
+                </div>
             </div>
-
+            <div className="flex justify-center mt-8">
+                <div className="flex text-white font-bold text-2xl gap-4">
+                    {moves.map((move, index) => (
+                        <div key={index}>{move}</div>
+                    ))}
+                </div>
+            </div>
+            <div className="flex justify-center mt-8">
+                <button className="bg-blue-500 hover:bg-blue-700 duration-200 text-white font-bold py-2 px-4 hobe rounded" onClick={() => setMoves(generate())}>
+                    Next scrumble
+                </button>
+            </div>
         </div>
+
     </>
   )
 }

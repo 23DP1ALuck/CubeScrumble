@@ -87,7 +87,7 @@ export const implementLeftRotate = (matrix: string[][][], times : number) : stri
     for(let i : number = 0; i < 3; i++) {
         let forL2Move = 2
         times === 1 && (matrix[0][i][0] = matrix[4][forL2Move - i][2])  // from white to blue
-        times === 2 && (matrix[0][i][0] = matrix[5][forL2Move - i][0]) // from white to yellow
+        times === 2 && (matrix[0][i][0] = matrix[5][i][0]) // from white to yellow
         times === -1 && (matrix[0][i][0] = matrix[2][i][0]) // from white to green
     }
     const rememberGreenSide : string[][] = matrix[2].map(row => [...row])
@@ -116,7 +116,6 @@ export const implementLeftRotate = (matrix: string[][][], times : number) : stri
 export const implementFrontRotate = (matrix: string[][][], times: number): string[][][] =>  {
     const rememberWhiteSide: string[][] = matrix[0].map(row => [...row])
     const yellowTest = matrix[5].map(side => [...side])
-    console.log("YELLOW SIDE 1st ROW", yellowTest[0])
     for(let i : number  = 0; i < 3; i++) {
         let forF2Move = 2
         times === 1 && (matrix[0][2][i] = matrix[1][forF2Move - i][2])  // from white to orange
@@ -202,7 +201,6 @@ export const implementUpRotate = (matrix : string[][][], times : number) => {
         times === -1 && (matrix[3][0][i] = rememberGreenSide[0][i]) // from red to green
     }
     matrix[0] = rotate90degOneSide(matrix[0], times)
-    console.log("WHITE:", matrix[0])
     return matrix
 }
 export const implementDownRotate = (matrix: string[][][], times : number) => {

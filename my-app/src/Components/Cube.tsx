@@ -16,7 +16,7 @@ const Cube = ({colors} : CubeProps) => {
             {[...Array(9)].map((_, i) => (
                 <div
                     key={i}
-                    className={`w-fit px-2 ${COLORS[colors[i]]} flex items-center justify-center font-bold text-xl border border-black`}
+                    className={`w-auto px-2 ${COLORS[colors[i]]} flex items-center justify-center font-bold text-xl border-1 border-black`}
                 >
                     {i + 1}
                 </div>
