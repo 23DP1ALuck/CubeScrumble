@@ -90,8 +90,8 @@ function App() {
     useEffect(() => {
        const moves : string[] = generate();
        console.log(moves);
-       const testScrumble : string[] = ["L2","U","R2","U\'","L2","F2","D\'", "U\'", "B2", "R2", "U2", "L", "F\'"]
-       const newLayout : string[][][] = calculateLayout(["L2", "U", "R2", "U\'", "L2", "F2", "D\'"]);
+       // const testScrumble : string[]  =  [];
+       const newLayout : string[][][] = calculateLayout(["B","B","R","D","R\'", "U", "F\'", "B", "R\'","R","F2","D","F\'","R2","L\'", "B\'", "F2", "B", "F", "U2"]);
        console.log("AFTER SCRUMBLE:",newLayout);
     },[])
   return (
